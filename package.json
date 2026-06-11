@@ -1,0 +1,32 @@
+{
+  "name": "feature-spec-md-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -b && vite build",
+    "feature-spec-md": "tsx node_modules/feature-spec-md/src/cli.ts",
+    "spec:check": "npm run feature-spec-md -- check --specs \"specs/**/*.feature.md\" --tests \"tests/**/*.ts\" --require-rule-coverage",
+    "spec:report": "npm run feature-spec-md -- report --specs \"specs/**/*.feature.md\" --tests \"tests/**/*.ts\" --out test-results/spec-report/index.html",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "verify": "npm run spec:check && npm run test:unit && npm run test:e2e && npm run spec:report"
+  },
+  "dependencies": {
+    "feature-spec-md": "git+https://github.com/anselmdk/feature-spec-md.git",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@playwright/test": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@vitejs/plugin-react": "latest",
+    "tsx": "latest",
+    "typescript": "latest",
+    "vite": "latest",
+    "vitest": "latest"
+  }
+}
