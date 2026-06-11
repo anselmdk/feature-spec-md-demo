@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #f6f7f8;
+  color: #17202a;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+.panel {
+  background: white;
+  border: 1px solid #dde1e6;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 16px 0;
+}
+
+form,
+.resolve {
+  display: grid;
+  gap: 10px;
+  max-width: 520px;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #aeb7c2;
+  border-radius: 8px;
+}
+
+button {
+  width: fit-content;
+  border: 1px solid #17202a;
+  border-radius: 8px;
+  background: #17202a;
+  color: white;
+  padding: 10px 14px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filters button[aria-pressed="true"] {
+  outline: 3px solid #7c8cff;
+}
+
+.tickets {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.ticket {
+  border: 1px solid #dde1e6;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+[role="alert"] {
+  color: #b42318;
+  font-weight: 600;
+}
