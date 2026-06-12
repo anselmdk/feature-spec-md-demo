@@ -13,7 +13,7 @@
     "verify": "npm run spec:check && npm run test:unit && npm run test:e2e && npm run spec:report"
   },
   "dependencies": {
-    "feature-spec-md": "git+https://github.com/anselmdk/feature-spec-md.git",
+    "@anselmdk/feature-spec-md": "^0.1.0",
     "react": "latest",
     "react-dom": "latest"
   },
