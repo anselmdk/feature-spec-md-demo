@@ -34,24 +34,14 @@ jobs:
           node <<'NODE'
           const fs = require("node:fs");
 
-          const reportPath = "test-results/spec-report/index.html";
           const summaryPath = process.env.GITHUB_STEP_SUMMARY;
           const artifactUrl = process.env.ARTIFACT_URL;
-          const report = fs.readFileSync(reportPath, "utf8");
-          const body = report.match(/<body[^>]*>([\s\S]*)<\/body>/i)?.[1] ?? report;
           const artifactLink = artifactUrl
             ? `<p><strong>Styled HTML artifact:</strong> <a href="${artifactUrl}">feature-spec-report</a></p>`
-            : "";
+            : "<p>Feature spec report artifact was uploaded.</p>";
 
           fs.appendFileSync(
             summaryPath,
-            [
-              "## Feature Spec Report",
-              "",
-              artifactLink,
-              "",
-              body.replace(/<h1>Feature Spec Report<\/h1>/, ""),
-              "",
-            ].join("\n"),
+            ["## Feature Spec Report", "", artifactLink, ""].join("\n"),
           );
           NODE
