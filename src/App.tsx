@@ -39,16 +39,17 @@ export function App() {
     updateTicket(ticket.id, (current) => transitionTicket(current, "in-progress"));
   }
 
-  function resolveTicket(ticket: Ticket) {
-    setStatusErrors((current) => ({ ...current, [ticket.id]: "" }));
+function resolveTicket(ticket: Ticket) {
+  const note = resolutionNotes[ticket.id] ?? "";
 
-    try {
-      const note = resolutionNotes[ticket.id] ?? "";
-      updateTicket(ticket.id, (current) => transitionTicket(current, "resolved", note));
-    } catch {
-      setStatusErrors((current) => ({ ...current, [ticket.id]: "Resolution note is required." }));
-    }
+  if (!note.trim()) {
+    setStatusErrors((current) => ({ ...current, [ticket.id]: "Resolution note is required." }));
+    return;
   }
+
+  setStatusErrors((current) => ({ ...current, [ticket.id]: "" }));
+  updateTicket(ticket.id, (current) => transitionTicket(current, "resolved", note));
+}
 
   return (
     <main className="app">
