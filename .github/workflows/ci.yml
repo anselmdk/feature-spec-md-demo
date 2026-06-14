@@ -12,4 +12,46 @@ jobs:
           node-version: 24
       - run: npm install
       - run: npx playwright install --with-deps chromium
-      - run: npm run verify
+      - run: npm run spec:check
+      - run: npm run test:unit
+      - run: npm run test:e2e
+      - name: Generate feature spec report
+        if: always()
+        run: npm run spec:report
+      - name: Upload feature spec report
+        id: upload-spec-report
+        if: always() && hashFiles('test-results/spec-report/index.html') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: feature-spec-report
+          path: test-results/spec-report
+          if-no-files-found: error
+      - name: Add feature spec report to job summary
+        if: always() && hashFiles('test-results/spec-report/index.html') != ''
+        env:
+          ARTIFACT_URL: ${{ steps.upload-spec-report.outputs.artifact-url }}
+        run: |
+          node <<'NODE'
+          const fs = require("node:fs");
+
+          const reportPath = "test-results/spec-report/index.html";
+          const summaryPath = process.env.GITHUB_STEP_SUMMARY;
+          const artifactUrl = process.env.ARTIFACT_URL;
+          const report = fs.readFileSync(reportPath, "utf8");
+          const body = report.match(/<body[^>]*>([\s\S]*)<\/body>/i)?.[1] ?? report;
+          const artifactLink = artifactUrl
+            ? `<p><strong>Styled HTML artifact:</strong> <a href="${artifactUrl}">feature-spec-report</a></p>`
+            : "";
+
+          fs.appendFileSync(
+            summaryPath,
+            [
+              "## Feature Spec Report",
+              "",
+              artifactLink,
+              "",
+              body.replace(/<h1>Feature Spec Report<\/h1>/, ""),
+              "",
+            ].join("\n"),
+          );
+          NODE
