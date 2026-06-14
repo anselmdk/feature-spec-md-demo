@@ -1,9 +1,13 @@
 import { expect, test } from "@playwright/test";
 
-test("TICKET-STATUS-S001 User moves a ticket to in progress", async ({ page }) => {
+test("TICKET-STATUS-S001 User moves a ticket to in progress", async ({
+  page,
+}) => {
   await page.goto("/");
 
-  const ticket = page.getByTestId("ticket-card").filter({ hasText: "Printer is offline" });
+  const ticket = page
+    .getByTestId("ticket-card")
+    .filter({ hasText: "Printer is offline" });
 
   await test.step("When the user starts working on the ticket", async () => {
     await ticket.getByRole("button", { name: "Start work" }).click();
@@ -14,10 +18,14 @@ test("TICKET-STATUS-S001 User moves a ticket to in progress", async ({ page }) =
   });
 });
 
-test("TICKET-STATUS-S002 User resolves a ticket with a note", async ({ page }) => {
+test("TICKET-STATUS-S002 User resolves a ticket with a note", async ({
+  page,
+}) => {
   await page.goto("/");
 
-  const ticket = page.getByTestId("ticket-card").filter({ hasText: "Email delivery is slow" });
+  const ticket = page
+    .getByTestId("ticket-card")
+    .filter({ hasText: "Email delivery is slow" });
 
   await test.step("When the user enters a resolution note and resolves the ticket", async () => {
     await ticket.getByLabel("Resolution note").fill("Queue was restarted.");
@@ -33,10 +41,14 @@ test("TICKET-STATUS-S002 User resolves a ticket with a note", async ({ page }) =
   });
 });
 
-test("TICKET-STATUS-S003 User cannot resolve a ticket without a note", async ({ page }) => {
+test("TICKET-STATUS-S003 User cannot resolve a ticket without a note", async ({
+  page,
+}) => {
   await page.goto("/");
 
-  const ticket = page.getByTestId("ticket-card").filter({ hasText: "Printer is offline" });
+  const ticket = page
+    .getByTestId("ticket-card")
+    .filter({ hasText: "Printer is offline" });
 
   await test.step("Given an in-progress ticket is visible", async () => {
     await ticket.getByRole("button", { name: "Start work" }).click();
@@ -52,6 +64,8 @@ test("TICKET-STATUS-S003 User cannot resolve a ticket without a note", async ({ 
   });
 
   await test.step("And they see a resolution note validation message", async () => {
-    await expect(ticket.getByRole("alert")).toHaveText("Resolution note is required.");
+    await expect(ticket.getByRole("alert")).toHaveText(
+      "Resolution note is required.",
+    );
   });
 });

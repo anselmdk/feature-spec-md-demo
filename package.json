@@ -11,7 +11,8 @@
     "spec:report": "npm run feature-spec-md -- report --specs \"specs/**/*.feature.md\" --tests \"tests/**/*.ts\" --out test-results/spec-report/index.html",
     "test:unit": "vitest run tests/unit",
     "test:e2e": "playwright test",
-    "verify": "npm run spec:check && npm run test:unit && npm run test:e2e && npm run spec:report"
+    "verify": "npm run spec:check && npm run test:unit && npm run test:e2e && npm run spec:report",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@anselmdk/feature-spec-md": "^0.1.0",
@@ -24,6 +25,7 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@vitejs/plugin-react": "latest",
+    "prettier": "^3.8.4",
     "tsx": "latest",
     "typescript": "latest",
     "vite": "latest",

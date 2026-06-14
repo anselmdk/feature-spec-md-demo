@@ -3,5 +3,6 @@ dist/
 test-results/
 playwright-report/
 coverage/
+*.tsbuildinfo
 .DS_Store
 .env

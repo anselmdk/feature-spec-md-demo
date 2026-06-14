@@ -38,7 +38,11 @@ export function createTicket(id: string, title: string): Ticket {
   };
 }
 
-export function canMoveToStatus(ticket: Ticket, nextStatus: TicketStatus, resolutionNote = "") {
+export function canMoveToStatus(
+  ticket: Ticket,
+  nextStatus: TicketStatus,
+  resolutionNote = "",
+) {
   if (ticket.status === nextStatus) {
     return true;
   }
@@ -54,7 +58,11 @@ export function canMoveToStatus(ticket: Ticket, nextStatus: TicketStatus, resolu
   return false;
 }
 
-export function transitionTicket(ticket: Ticket, nextStatus: TicketStatus, resolutionNote = ""): Ticket {
+export function transitionTicket(
+  ticket: Ticket,
+  nextStatus: TicketStatus,
+  resolutionNote = "",
+): Ticket {
   if (!canMoveToStatus(ticket, nextStatus, resolutionNote)) {
     throw new Error("Status transition is not allowed.");
   }
@@ -62,7 +70,8 @@ export function transitionTicket(ticket: Ticket, nextStatus: TicketStatus, resol
   return {
     ...ticket,
     status: nextStatus,
-    resolutionNote: nextStatus === "resolved" ? resolutionNote.trim() : ticket.resolutionNote,
+    resolutionNote:
+      nextStatus === "resolved" ? resolutionNote.trim() : ticket.resolutionNote,
   };
 }
 

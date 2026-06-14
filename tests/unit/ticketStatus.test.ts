@@ -1,8 +1,20 @@
 import { describe, expect, it } from "vitest";
-import { canMoveToStatus, transitionTicket, type Ticket } from "../../src/ticketRules";
+import {
+  canMoveToStatus,
+  transitionTicket,
+  type Ticket,
+} from "../../src/ticketRules";
 
-const openTicket: Ticket = { id: "1", title: "Printer is offline", status: "open" };
-const progressTicket: Ticket = { id: "2", title: "Email delivery is slow", status: "in-progress" };
+const openTicket: Ticket = {
+  id: "1",
+  title: "Printer is offline",
+  status: "open",
+};
+const progressTicket: Ticket = {
+  id: "2",
+  title: "Email delivery is slow",
+  status: "in-progress",
+};
 
 describe("ticket status rules", () => {
   it("TICKET-STATUS-R001 allows an open ticket to move to in progress", () => {
@@ -18,6 +30,8 @@ describe("ticket status rules", () => {
   });
 
   it("stores the resolution note when resolving a ticket", () => {
-    expect(transitionTicket(progressTicket, "resolved", "Done").resolutionNote).toBe("Done");
+    expect(
+      transitionTicket(progressTicket, "resolved", "Done").resolutionNote,
+    ).toBe("Done");
   });
 });

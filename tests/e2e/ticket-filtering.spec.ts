@@ -8,9 +8,15 @@ test("TICKET-FILTERING-S001 User sees all tickets", async ({ page }) => {
   });
 
   await test.step("Then every ticket is visible", async () => {
-    await expect(page.getByRole("heading", { name: "Printer is offline" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Email delivery is slow" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Password reset loop" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Printer is offline" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Email delivery is slow" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Password reset loop" }),
+    ).toBeVisible();
   });
 });
 
@@ -22,13 +28,21 @@ test("TICKET-FILTERING-S002 User filters open tickets", async ({ page }) => {
   });
 
   await test.step("Then only open tickets are visible", async () => {
-    await expect(page.getByRole("heading", { name: "Printer is offline" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Email delivery is slow" })).not.toBeVisible();
-    await expect(page.getByRole("heading", { name: "Password reset loop" })).not.toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Printer is offline" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Email delivery is slow" }),
+    ).not.toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Password reset loop" }),
+    ).not.toBeVisible();
   });
 });
 
-test("TICKET-FILTERING-S003 User filters resolved tickets", async ({ page }) => {
+test("TICKET-FILTERING-S003 User filters resolved tickets", async ({
+  page,
+}) => {
   await page.goto("/");
 
   await test.step("When the user selects the resolved filter", async () => {
@@ -36,8 +50,14 @@ test("TICKET-FILTERING-S003 User filters resolved tickets", async ({ page }) => 
   });
 
   await test.step("Then only resolved tickets are visible", async () => {
-    await expect(page.getByRole("heading", { name: "Printer is offline" })).not.toBeVisible();
-    await expect(page.getByRole("heading", { name: "Email delivery is slow" })).not.toBeVisible();
-    await expect(page.getByRole("heading", { name: "Password reset loop" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Printer is offline" }),
+    ).not.toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Email delivery is slow" }),
+    ).not.toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Password reset loop" }),
+    ).toBeVisible();
   });
 });

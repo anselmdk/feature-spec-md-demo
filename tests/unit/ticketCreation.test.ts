@@ -7,7 +7,9 @@ describe("ticket creation rules", () => {
   });
 
   it("TICKET-CREATION-R002 rejects titles longer than 80 characters", () => {
-    expect(validateTicketTitle("x".repeat(81))).toBe("Title must be 80 characters or fewer.");
+    expect(validateTicketTitle("x".repeat(81))).toBe(
+      "Title must be 80 characters or fewer.",
+    );
   });
 
   it("TICKET-CREATION-R003 creates new tickets with open status", () => {

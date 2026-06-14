@@ -4,7 +4,9 @@ test("TICKET-CREATION-S001 User creates a valid ticket", async ({ page }) => {
   await page.goto("/");
 
   await test.step("Given the user is on the ticket desk", async () => {
-    await expect(page.getByRole("heading", { name: "Mini support desk" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Mini support desk" }),
+    ).toBeVisible();
   });
 
   await test.step("When they create a ticket with a valid title", async () => {
@@ -13,16 +15,22 @@ test("TICKET-CREATION-S001 User creates a valid ticket", async ({ page }) => {
   });
 
   await test.step("Then the new ticket is visible", async () => {
-    await expect(page.getByRole("heading", { name: "Laptop screen flickers" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Laptop screen flickers" }),
+    ).toBeVisible();
   });
 
   await test.step("And the ticket has status open", async () => {
-    const ticket = page.getByTestId("ticket-card").filter({ hasText: "Laptop screen flickers" });
+    const ticket = page
+      .getByTestId("ticket-card")
+      .filter({ hasText: "Laptop screen flickers" });
     await expect(ticket).toContainText("Status: open");
   });
 });
 
-test("TICKET-CREATION-S002 User cannot create a ticket without a title", async ({ page }) => {
+test("TICKET-CREATION-S002 User cannot create a ticket without a title", async ({
+  page,
+}) => {
   await page.goto("/");
 
   await test.step("When they try to create a ticket without a title", async () => {
