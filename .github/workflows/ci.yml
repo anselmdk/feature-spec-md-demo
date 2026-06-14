@@ -7,43 +7,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: feature-spec-md-demo
-      - uses: actions/checkout@v4
-        with:
-          repository: anselmdk/feature-spec-md
-          path: feature-spec-md
       - uses: actions/setup-node@v4
         with:
           node-version: 24
       - run: npm install
-        working-directory: feature-spec-md
-      - run: npm run build
-        working-directory: feature-spec-md
-      - run: npm install
-        working-directory: feature-spec-md-demo
       - run: npx playwright install --with-deps chromium
-        working-directory: feature-spec-md-demo
       - run: npm run spec:check
-        working-directory: feature-spec-md-demo
       - run: npm run test:unit
-        working-directory: feature-spec-md-demo
       - run: npm run test:e2e
-        working-directory: feature-spec-md-demo
       - name: Generate feature spec report
         if: always()
         run: npm run spec:report
-        working-directory: feature-spec-md-demo
       - name: Upload feature spec report
         id: upload-spec-report
-        if: always() && hashFiles('feature-spec-md-demo/test-results/spec-report/index.html') != ''
+        if: always() && hashFiles('test-results/spec-report/index.html') != ''
         uses: actions/upload-artifact@v4
         with:
           name: feature-spec-report
-          path: feature-spec-md-demo/test-results/spec-report
+          path: test-results/spec-report
           if-no-files-found: error
       - name: Add feature spec report to job summary
-        if: always() && hashFiles('feature-spec-md-demo/test-results/spec-report/index.html') != ''
+        if: always() && hashFiles('test-results/spec-report/index.html') != ''
         env:
           ARTIFACT_URL: ${{ steps.upload-spec-report.outputs.artifact-url }}
         run: |
