@@ -46,3 +46,10 @@ test-results/spec-report/index.html
 
 This demo uses the sibling `feature-spec-md` package through a local file
 dependency so report changes can be exercised before publishing the library.
+Build the sibling package first when running the demo from a fresh checkout:
+
+```bash
+cd ../feature-spec-md
+npm install
+npm run build
+```

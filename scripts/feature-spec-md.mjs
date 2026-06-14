@@ -14,7 +14,7 @@ const cli = candidates.find((candidate) =>
 
 if (!cli) {
   throw new Error(
-    "feature-spec-md CLI is not available. Run npm install first.",
+    "feature-spec-md CLI is not available. Run npm install in this project and npm run build in ../feature-spec-md.",
   );
 }
 
