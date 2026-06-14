@@ -8,9 +8,9 @@
     "build": "tsc -b && vite build",
     "feature-spec-md": "node scripts/feature-spec-md.mjs",
     "spec:check": "npm run feature-spec-md -- check --specs \"specs/**/*.feature.md\" --tests \"tests/**/*.ts\" --require-rule-coverage",
-    "spec:report": "npm run feature-spec-md -- report --specs \"specs/**/*.feature.md\" --tests \"tests/**/*.ts\" --out test-results/spec-report/index.html",
+    "spec:report": "npm run feature-spec-md -- report --specs \"specs/**/*.feature.md\" --tests \"tests/**/*.ts\" --screenshots \"test-results/spec-report/screenshots-*.json\" --out test-results/spec-report/index.html",
     "test:unit": "vitest run tests/unit",
-    "test:e2e": "playwright test",
+    "test:e2e": "node scripts/clean-spec-report.mjs && playwright test",
     "verify": "npm run spec:check && npm run test:unit && npm run test:e2e && npm run spec:report",
     "format": "prettier --write ."
   },

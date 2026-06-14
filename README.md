@@ -31,6 +31,11 @@ npm run spec:report
 npm run verify
 ```
 
+The Playwright tests capture a screenshot for every Given / When / Then / And
+line in the specs. Those screenshots are written into the generated feature spec
+report so the GitHub Actions artifact can be downloaded with the evidence
+included.
+
 The generated report is written to:
 
 ```txt
