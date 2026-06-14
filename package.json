@@ -15,7 +15,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@anselmdk/feature-spec-md": "^0.1.0",
+    "@anselmdk/feature-spec-md": "file:../feature-spec-md",
     "react": "latest",
     "react-dom": "latest"
   },

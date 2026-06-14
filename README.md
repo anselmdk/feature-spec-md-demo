@@ -44,10 +44,5 @@ test-results/spec-report/index.html
 
 ## Dependency note
 
-This demo currently depends on the private GitHub repository:
-
-```txt
-git+https://github.com/anselmdk/feature-spec-md.git
-```
-
-Your GitHub credentials must be able to read that private repo.
+This demo uses the sibling `feature-spec-md` package through a local file
+dependency so report changes can be exercised before publishing the library.
