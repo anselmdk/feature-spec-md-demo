@@ -36,7 +36,12 @@ test("TICKET-STATUS-S002 User resolves a ticket with a note", async ({ page }) =
 test("TICKET-STATUS-S003 User cannot resolve a ticket without a note", async ({ page }) => {
   await page.goto("/");
 
-  const ticket = page.getByTestId("ticket-card").filter({ hasText: "Email delivery is slow" });
+  const ticket = page.getByTestId("ticket-card").filter({ hasText: "Printer is offline" });
+
+  await test.step("Given an in-progress ticket is visible", async () => {
+    await ticket.getByRole("button", { name: "Start work" }).click();
+    await expect(ticket).toContainText("Status: in-progress");
+  });
 
   await test.step("When the user tries to resolve the ticket without a note", async () => {
     await ticket.getByRole("button", { name: "Resolve" }).click();
