@@ -31,3 +31,10 @@ Given the user is on the ticket desk
 When they try to create a ticket without a title
 Then the ticket is not created
 And they see a title validation message
+
+### TICKET-CREATION-S003: User cannot create a ticket with a long title
+
+Given the user is on the ticket desk
+When they try to create a ticket with a title longer than 80 characters
+Then the ticket is not created
+And they see a title length validation message

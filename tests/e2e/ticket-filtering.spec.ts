@@ -1,6 +1,6 @@
 import { expect, specStep, test } from "./specEvidence";
 
-test("TICKET-FILTERING-S001 User sees all tickets", async ({
+test("TICKET-FILTERING-S001 TICKET-FILTERING-R001 User sees all tickets", async ({
   page,
 }, testInfo) => {
   const scenarioId = "TICKET-FILTERING-S001";
@@ -53,7 +53,7 @@ test("TICKET-FILTERING-S001 User sees all tickets", async ({
   );
 });
 
-test("TICKET-FILTERING-S002 User filters open tickets", async ({
+test("TICKET-FILTERING-S002 TICKET-FILTERING-R002 User filters open tickets", async ({
   page,
 }, testInfo) => {
   const scenarioId = "TICKET-FILTERING-S002";
@@ -106,7 +106,7 @@ test("TICKET-FILTERING-S002 User filters open tickets", async ({
   );
 });
 
-test("TICKET-FILTERING-S003 User filters resolved tickets", async ({
+test("TICKET-FILTERING-S003 TICKET-FILTERING-R003 User filters resolved tickets", async ({
   page,
 }, testInfo) => {
   const scenarioId = "TICKET-FILTERING-S003";

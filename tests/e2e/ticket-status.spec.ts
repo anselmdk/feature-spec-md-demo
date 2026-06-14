@@ -1,6 +1,6 @@
 import { expect, specStep, test } from "./specEvidence";
 
-test("TICKET-STATUS-S001 User moves a ticket to in progress", async ({
+test("TICKET-STATUS-S001 TICKET-STATUS-R001 User moves a ticket to in progress", async ({
   page,
 }, testInfo) => {
   const scenarioId = "TICKET-STATUS-S001";
@@ -43,7 +43,7 @@ test("TICKET-STATUS-S001 User moves a ticket to in progress", async ({
   );
 });
 
-test("TICKET-STATUS-S002 User resolves a ticket with a note", async ({
+test("TICKET-STATUS-S002 TICKET-STATUS-R002 User resolves a ticket with a note", async ({
   page,
 }, testInfo) => {
   const scenarioId = "TICKET-STATUS-S002";
@@ -97,7 +97,7 @@ test("TICKET-STATUS-S002 User resolves a ticket with a note", async ({
   );
 });
 
-test("TICKET-STATUS-S003 User cannot resolve a ticket without a note", async ({
+test("TICKET-STATUS-S003 TICKET-STATUS-R003 User cannot resolve a ticket without a note", async ({
   page,
 }, testInfo) => {
   const scenarioId = "TICKET-STATUS-S003";
