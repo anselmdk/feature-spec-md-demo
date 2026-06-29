@@ -15,6 +15,7 @@ jobs:
       - run: npm run build
       - run: npm run spec:check
       - run: npm run spec:coverage
+      - run: node scripts/assert-spec-coverage.mjs
       - run: npm run test:unit
       - run: npm run test:e2e
       - name: Generate feature spec report
