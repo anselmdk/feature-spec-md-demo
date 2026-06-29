@@ -2,6 +2,7 @@
 id: TICKET-STATUS
 title: Ticket status
 status: draft
+model: TICKET-DESK
 ---
 
 # Ticket status
