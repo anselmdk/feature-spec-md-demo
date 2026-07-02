@@ -21,30 +21,11 @@ jobs:
       - name: Generate feature spec report
         if: always()
         run: npm run spec:report
-      - name: Upload feature spec report
-        id: upload-spec-report
+      - name: Publish feature spec report
         if: always() && hashFiles('test-results/spec-report/index.html') != ''
-        uses: actions/upload-artifact@v4
-        with:
-          name: feature-spec-report
-          path: test-results/spec-report
-          if-no-files-found: error
-      - name: Add feature spec report to job summary
-        if: always() && hashFiles('test-results/spec-report/index.html') != ''
+        run: npx feature-spec-md github-report --publish ftp --report-dir test-results/spec-report
         env:
-          ARTIFACT_URL: ${{ steps.upload-spec-report.outputs.artifact-url }}
-        run: |
-          node <<'NODE'
-          const fs = require("node:fs");
-
-          const summaryPath = process.env.GITHUB_STEP_SUMMARY;
-          const artifactUrl = process.env.ARTIFACT_URL;
-          const artifactLink = artifactUrl
-            ? `<p><strong>Styled HTML artifact:</strong> <a href="${artifactUrl}">feature-spec-report</a></p>`
-            : "<p>Feature spec report artifact was uploaded.</p>";
-
-          fs.appendFileSync(
-            summaryPath,
-            ["## Feature Spec Report", "", artifactLink, ""].join("\n"),
-          );
-          NODE
+          FEATURE_SPEC_FTP_HOST: ${{ secrets.FEATURE_SPEC_FTP_HOST }}
+          FEATURE_SPEC_FTP_USER: ${{ secrets.FEATURE_SPEC_FTP_USER }}
+          FEATURE_SPEC_FTP_PASSWORD: ${{ secrets.FEATURE_SPEC_FTP_PASSWORD }}
+          FEATURE_SPEC_REPORT_BASE_URL: ${{ secrets.FEATURE_SPEC_REPORT_BASE_URL }}
