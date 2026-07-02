@@ -25,7 +25,8 @@ jobs:
         if: always() && hashFiles('test-results/spec-report/index.html') != ''
         run: npx feature-spec-md github-report --publish ftp --report-dir test-results/spec-report
         env:
-          FEATURE_SPEC_FTP_HOST: ${{ secrets.FEATURE_SPEC_FTP_HOST }}
-          FEATURE_SPEC_FTP_USER: ${{ secrets.FEATURE_SPEC_FTP_USER }}
+          FEATURE_SPEC_FTP_HOST: ${{ vars.FEATURE_SPEC_FTP_HOST }}
+          FEATURE_SPEC_FTP_USER: ${{ vars.FEATURE_SPEC_FTP_USER }}
+          FEATURE_SPEC_FTP_REMOTE_DIR: ${{ vars.FEATURE_SPEC_FTP_REMOTE_DIR }}
+          FEATURE_SPEC_REPORT_BASE_URL: ${{ vars.FEATURE_SPEC_REPORT_BASE_URL }}
           FEATURE_SPEC_FTP_PASSWORD: ${{ secrets.FEATURE_SPEC_FTP_PASSWORD }}
-          FEATURE_SPEC_REPORT_BASE_URL: ${{ secrets.FEATURE_SPEC_REPORT_BASE_URL }}
