@@ -19,7 +19,7 @@
     "react-dom": "latest"
   },
   "devDependencies": {
-    "@anselmdk/feature-spec-md": "^0.2.1",
+    "@anselmdk/feature-spec-md": "0.2.1-rc.1",
     "@playwright/test": "latest",
     "@types/node": "latest",
     "@types/react": "latest",
