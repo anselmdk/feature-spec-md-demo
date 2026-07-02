@@ -79,7 +79,7 @@ jobs:
         with:
           script: |
             const prNumber = Number('${{ steps.changes.outputs.pr-number }}');
-            const body = `${{ steps.diff_report.outputs.diff-comment-body }}`;
+            const body = ${{ toJson(steps.diff_report.outputs.diff-comment-body) }};
             const marker = '<!-- feature-spec-md-pr-diff -->';
             const comments = await github.paginate(github.rest.issues.listComments, {
               owner: context.repo.owner,
