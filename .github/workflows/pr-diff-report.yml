@@ -1,0 +1,107 @@
+name: PR diff report
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  diff-report:
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.pull_requests[0]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check whether code or specs changed
+        id: changes
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const pr = context.payload.workflow_run.pull_requests[0];
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+            });
+            const relevant = files.some((file) => {
+              const name = file.filename;
+              return (
+                /^(src|specs|tests|scripts|public)\//.test(name) ||
+                /^package(-lock)?\.json$/.test(name) ||
+                /^vite\.config\./.test(name) ||
+                /^playwright\.config\./.test(name) ||
+                /^tsconfig.*\.json$/.test(name) ||
+                /\.(model|feature|stack|design)\.md$/.test(name)
+              );
+            });
+            core.setOutput('changed', relevant ? 'true' : 'false');
+            core.setOutput('pr-number', String(pr.number));
+
+      - uses: actions/checkout@v4
+        if: steps.changes.outputs.changed == 'true'
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - uses: actions/setup-node@v4
+        if: steps.changes.outputs.changed == 'true'
+        with:
+          node-version: 24
+
+      - run: npm install
+        if: steps.changes.outputs.changed == 'true'
+
+      - name: Publish PR diff report
+        id: diff_report
+        if: steps.changes.outputs.changed == 'true'
+        run: npx feature-spec-md github-diff-report --publish ftp
+        env:
+          FEATURE_SPEC_BUILD_NUMBER: ${{ github.event.workflow_run.run_number }}
+          FEATURE_SPEC_PR_NUMBER: ${{ steps.changes.outputs.pr-number }}
+          FEATURE_SPEC_FTP_HOST: ${{ vars.FEATURE_SPEC_FTP_HOST }}
+          FEATURE_SPEC_FTP_USER: ${{ vars.FEATURE_SPEC_FTP_USER }}
+          FEATURE_SPEC_FTP_REMOTE_DIR: ${{ vars.FEATURE_SPEC_FTP_REMOTE_DIR }}
+          FEATURE_SPEC_REPORT_BASE_URL: ${{ vars.FEATURE_SPEC_REPORT_BASE_URL }}
+          FEATURE_SPEC_FTP_PASSWORD: ${{ secrets.FEATURE_SPEC_FTP_PASSWORD }}
+
+      - name: Comment on PR
+        if: steps.changes.outputs.changed == 'true' && steps.diff_report.outputs.diff-report-url != ''
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const prNumber = Number('${{ steps.changes.outputs.pr-number }}');
+            const body = ${{ toJson(steps.diff_report.outputs.diff-comment-body) }};
+            const marker = '<!-- feature-spec-md-pr-diff -->';
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+            });
+            const previous = comments.find((comment) =>
+              comment.user?.type === 'Bot' && comment.body?.includes(marker)
+            );
+            const nextBody = `${marker}\n${body}`;
+            if (previous) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: previous.id,
+                body: nextBody,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: nextBody,
+              });
+            }
