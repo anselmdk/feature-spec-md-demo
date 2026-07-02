@@ -2,6 +2,7 @@
 id: TICKET-FILTERING
 title: Ticket filtering
 status: draft
+model: TICKET-DESK
 ---
 
 # Ticket filtering
