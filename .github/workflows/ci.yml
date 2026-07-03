@@ -19,8 +19,32 @@ jobs:
       - run: npm run test:unit
       - run: npm run test:e2e
       - name: Generate feature spec report
+        id: spec_report
         if: always()
-        run: npm run spec:report
+        shell: bash
+        run: |
+          set +e
+          npm run spec:report
+          status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          if [ "$status" -eq 0 ]; then
+            {
+              echo "## Feature Spec Evidence"
+              echo ""
+              echo "✅ Declared screenshot evidence is complete."
+              echo ""
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            {
+              echo "## Feature Spec Evidence"
+              echo ""
+              echo "❌ Declared screenshot evidence is incomplete."
+              echo ""
+              echo "The HTML report is still published below for inspection."
+              echo ""
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          exit 0
       - name: Publish feature spec report
         if: always() && hashFiles('test-results/spec-report/index.html') != ''
         run: npx feature-spec-md github-report --publish ftp --report-dir test-results/spec-report
@@ -30,3 +54,6 @@ jobs:
           FEATURE_SPEC_FTP_REMOTE_DIR: ${{ vars.FEATURE_SPEC_FTP_REMOTE_DIR }}
           FEATURE_SPEC_REPORT_BASE_URL: ${{ vars.FEATURE_SPEC_REPORT_BASE_URL }}
           FEATURE_SPEC_FTP_PASSWORD: ${{ secrets.FEATURE_SPEC_FTP_PASSWORD }}
+      - name: Fail on feature spec evidence errors
+        if: always() && steps.spec_report.outputs.status != '0'
+        run: exit 1
