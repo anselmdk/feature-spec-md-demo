@@ -9,14 +9,14 @@
     "build": "tsc -b && vite build",
     "spec:check": "feature-spec-md check --tests \"tests/**/*.ts\" --require-rule-coverage --require-model-coverage",
     "spec:coverage": "feature-spec-md coverage --tests \"tests/**/*.ts\" --fail-on-missing",
-    "spec:report": "feature-spec-md report --tests \"tests/**/*.ts\" --screenshots \"test-results/spec-report/screenshots-*.json\" --out test-results/spec-report/index.html",
+    "spec:report": "feature-spec-md report --tests \"tests/**/*.ts\" --screenshots \"test-results/spec-report/screenshots-*.json\" --enforce-evidence --out test-results/spec-report/index.html",
     "test:unit": "vitest run tests/unit",
     "test:e2e": "node scripts/clean-spec-report.mjs && playwright test",
     "verify": "npm run build && npm run spec:check && npm run spec:coverage && npm run test:unit && npm run test:e2e && npm run spec:report",
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@anselmdk/feature-spec-md": "0.5.0",
+    "@anselmdk/feature-spec-md": "0.5.0-rc.1",
     "react": "latest",
     "react-dom": "latest"
   },
