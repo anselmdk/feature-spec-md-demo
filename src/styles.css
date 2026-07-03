@@ -50,6 +50,30 @@ button {
   padding: 10px 14px;
 }
 
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.summary-grid div {
+  border: 1px solid #dde1e6;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.summary-grid dt {
+  color: #5d6b7a;
+  font-size: 0.9rem;
+}
+
+.summary-grid dd {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 4px 0 0;
+}
+
 .filters {
   display: flex;
   flex-wrap: wrap;
