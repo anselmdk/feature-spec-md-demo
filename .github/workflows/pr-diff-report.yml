@@ -115,6 +115,24 @@ jobs:
             const latest = runs.find((run) => run.run_number < currentBuildNumber);
             core.setOutput('build-number', latest ? String(latest.run_number) : '');
 
+      - name: Find latest main build
+        id: main_build
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const runs = await github.paginate(github.rest.actions.listWorkflowRuns, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: context.payload.workflow_run.workflow_id,
+              branch: 'main',
+              status: 'success',
+              event: 'push',
+              per_page: 20,
+            });
+            const latest = runs.find((run) => run.run_number < context.payload.workflow_run.run_number);
+            core.setOutput('build-number', latest ? String(latest.run_number) : '');
+
       - uses: actions/checkout@v4
         if: steps.changes.outputs.changed == 'true'
         with:
