@@ -2,6 +2,8 @@
 id: SUPPORT-QUEUE-SUMMARY
 title: Support queue summary
 status: draft
+test: playwright
+screenshots: required
 ---
 
 # Support queue summary
@@ -12,7 +14,7 @@ Give support agents a quick count of tickets by workflow status before they insp
 
 ## Rules
 
-- SUPPORT-QUEUE-SUMMARY-R001: The desk MUST show the number of open, in-progress, and resolved tickets currently in the queue.
+- SUPPORT-QUEUE-SUMMARY-R001: The desk MUST show ticket counts for open, in-progress, and resolved tickets.
 
 ## Scenarios
 
