@@ -47,6 +47,24 @@ jobs:
             core.setOutput('changed', relevant ? 'true' : 'false');
             core.setOutput('pr-number', String(pr.number));
 
+      - name: Find latest main build
+        id: main_build
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const runs = await github.paginate(github.rest.actions.listWorkflowRuns, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: context.payload.workflow_run.workflow_id,
+              branch: 'main',
+              status: 'success',
+              event: 'push',
+              per_page: 20,
+            });
+            const latest = runs.find((run) => run.run_number < context.payload.workflow_run.run_number);
+            core.setOutput('build-number', latest ? String(latest.run_number) : '');
+
       - uses: actions/checkout@v4
         if: steps.changes.outputs.changed == 'true'
         with:
@@ -66,6 +84,7 @@ jobs:
         run: npx feature-spec-md github-diff-report --publish ftp
         env:
           FEATURE_SPEC_BUILD_NUMBER: ${{ github.event.workflow_run.run_number }}
+          FEATURE_SPEC_BASE_BUILD_NUMBER: ${{ steps.main_build.outputs.build-number }}
           FEATURE_SPEC_PR_NUMBER: ${{ steps.changes.outputs.pr-number }}
           FEATURE_SPEC_FTP_HOST: ${{ vars.FEATURE_SPEC_FTP_HOST }}
           FEATURE_SPEC_FTP_USER: ${{ vars.FEATURE_SPEC_FTP_USER }}
