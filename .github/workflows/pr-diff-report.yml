@@ -4,6 +4,12 @@ on:
   workflow_run:
     workflows: [CI]
     types: [completed]
+  workflow_dispatch:
+    inputs:
+      pr-number:
+        description: Pull request number to generate a diff report for
+        required: true
+        type: number
 
 permissions:
   contents: read
@@ -17,9 +23,12 @@ defaults:
 jobs:
   diff-report:
     if: >-
-      github.event.workflow_run.event == 'pull_request' &&
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.pull_requests[0]
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event.workflow_run.event == 'pull_request' &&
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.pull_requests[0]
+      )
     runs-on: ubuntu-latest
     steps:
       - name: Check whether code or specs changed
@@ -27,11 +36,18 @@ jobs:
         uses: actions/github-script@v8
         with:
           script: |
-            const pr = context.payload.workflow_run.pull_requests[0];
+            const prNumber = context.eventName === 'workflow_dispatch'
+              ? Number(core.getInput('pr-number'))
+              : context.payload.workflow_run.pull_requests[0].number;
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+            });
             const files = await github.paginate(github.rest.pulls.listFiles, {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: pr.number,
+              pull_number: prNumber,
             });
             const relevant = files.some((file) => {
               const name = file.filename;
@@ -45,7 +61,59 @@ jobs:
               );
             });
             core.setOutput('changed', relevant ? 'true' : 'false');
-            core.setOutput('pr-number', String(pr.number));
+            core.setOutput('pr-number', String(prNumber));
+            core.setOutput('head-sha', pr.head.sha);
+            core.setOutput('head-ref', pr.head.ref);
+
+      - name: Resolve current PR build
+        id: current_build
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            if (context.eventName === 'workflow_run') {
+              core.setOutput('build-number', String(context.payload.workflow_run.run_number));
+              core.setOutput('run-url', context.payload.workflow_run.html_url);
+              core.setOutput('workflow-id', String(context.payload.workflow_run.workflow_id));
+              return;
+            }
+
+            const runs = await github.paginate(github.rest.actions.listWorkflowRuns, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'ci.yml',
+              event: 'pull_request',
+              status: 'success',
+              head_sha: '${{ steps.changes.outputs.head-sha }}',
+              per_page: 20,
+            });
+            const latest = runs[0];
+            if (!latest) {
+              core.setFailed('No successful pull_request CI build found for PR #${{ steps.changes.outputs.pr-number }} at ${{ steps.changes.outputs.head-sha }}.');
+              return;
+            }
+            core.setOutput('build-number', String(latest.run_number));
+            core.setOutput('run-url', latest.html_url);
+            core.setOutput('workflow-id', String(latest.workflow_id));
+
+      - name: Find latest main build
+        id: main_build
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const runs = await github.paginate(github.rest.actions.listWorkflowRuns, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: '${{ steps.current_build.outputs.workflow-id }}',
+              branch: 'main',
+              status: 'success',
+              event: 'push',
+              per_page: 20,
+            });
+            const currentBuildNumber = Number('${{ steps.current_build.outputs.build-number }}');
+            const latest = runs.find((run) => run.run_number < currentBuildNumber);
+            core.setOutput('build-number', latest ? String(latest.run_number) : '');
 
       - name: Find latest main build
         id: main_build
@@ -68,7 +136,7 @@ jobs:
       - uses: actions/checkout@v4
         if: steps.changes.outputs.changed == 'true'
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ steps.changes.outputs.head-sha }}
 
       - uses: actions/setup-node@v4
         if: steps.changes.outputs.changed == 'true'
@@ -83,7 +151,7 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         run: npx feature-spec-md github-diff-report --publish ftp
         env:
-          FEATURE_SPEC_BUILD_NUMBER: ${{ github.event.workflow_run.run_number }}
+          FEATURE_SPEC_BUILD_NUMBER: ${{ steps.current_build.outputs.build-number }}
           FEATURE_SPEC_BASE_BUILD_NUMBER: ${{ steps.main_build.outputs.build-number }}
           FEATURE_SPEC_PR_NUMBER: ${{ steps.changes.outputs.pr-number }}
           FEATURE_SPEC_FTP_HOST: ${{ vars.FEATURE_SPEC_FTP_HOST }}
@@ -100,6 +168,10 @@ jobs:
             const prNumber = Number('${{ steps.changes.outputs.pr-number }}');
             const body = ${{ toJson(steps.diff_report.outputs.diff-comment-body) }};
             const marker = '<!-- feature-spec-md-pr-diff -->';
+            const buildNumber = '${{ steps.current_build.outputs.build-number }}';
+            const baseBuildNumber = '${{ steps.main_build.outputs.build-number }}';
+            const timestamp = new Date().toISOString();
+            const runUrl = '${{ steps.current_build.outputs.run-url }}';
             const comments = await github.paginate(github.rest.issues.listComments, {
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -108,7 +180,17 @@ jobs:
             const previous = comments.find((comment) =>
               comment.user?.type === 'Bot' && comment.body?.includes(marker)
             );
-            const nextBody = `${marker}\n${body}`;
+            const lines = [];
+            lines.push('### PR build ' + buildNumber + ' - ' + timestamp);
+            lines.push('');
+            lines.push(baseBuildNumber ? 'Base: main build ' + baseBuildNumber : 'Base: previous build fallback');
+            lines.push('CI run: [#' + buildNumber + '](' + runUrl + ')');
+            lines.push('');
+            lines.push(body);
+            const entry = lines.join('\n');
+            const nextBody = previous
+              ? previous.body + '\n\n---\n\n' + entry
+              : marker + '\n## Feature spec PR diff history\n\n' + entry;
             if (previous) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,

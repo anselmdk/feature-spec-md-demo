@@ -3,6 +3,7 @@ id: TICKET-FILTERING
 title: Ticket filtering
 status: draft
 model: TICKET-DESK
+test: playwright
 ---
 
 # Ticket filtering

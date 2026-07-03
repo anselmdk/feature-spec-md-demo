@@ -3,6 +3,7 @@ id: TICKET-CREATION
 title: Ticket creation
 status: draft
 model: TICKET-DESK
+test: playwright
 ---
 
 # Ticket creation

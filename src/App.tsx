@@ -23,6 +23,7 @@ const initialTickets: Ticket[] = [
 ];
 
 export function App() {
+  console.log('test')
   const [tickets, setTickets] = useState<Ticket[]>(initialTickets);
   const [title, setTitle] = useState("");
   const [filter, setFilter] = useState<TicketFilter>("all");
@@ -31,6 +32,16 @@ export function App() {
     Record<string, string>
   >({});
   const [statusErrors, setStatusErrors] = useState<Record<string, string>>({});
+
+  const queueSummary = useMemo(
+    () => ({
+      open: tickets.filter((ticket) => ticket.status === "open").length,
+      inProgress: tickets.filter((ticket) => ticket.status === "in-progress")
+        .length,
+      resolved: tickets.filter((ticket) => ticket.status === "resolved").length,
+    }),
+    [tickets],
+  );
 
   const visibleTickets = useMemo(
     () => filterTickets(tickets, filter),
@@ -85,6 +96,31 @@ export function App() {
   return (
     <main className="app">
       <h1>Mini support desk</h1>
+
+      <section
+        className="panel queue-summary"
+        aria-labelledby="queue-summary-heading"
+      >
+        <h2 id="queue-summary-heading">Queue summary</h2>
+        <dl className="summary-grid" aria-label="Ticket totals">
+          <div>
+            <dt>Open</dt>
+            <dd data-testid="queue-summary-open">{queueSummary.open}</dd>
+          </div>
+          <div>
+            <dt>In progress</dt>
+            <dd data-testid="queue-summary-in-progress">
+              {queueSummary.inProgress}
+            </dd>
+          </div>
+          <div>
+            <dt>Resolved</dt>
+            <dd data-testid="queue-summary-resolved">
+              {queueSummary.resolved}
+            </dd>
+          </div>
+        </dl>
+      </section>
 
       <section className="panel" aria-labelledby="create-ticket-heading">
         <h2 id="create-ticket-heading">Create ticket</h2>

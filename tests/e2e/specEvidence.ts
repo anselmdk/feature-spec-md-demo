@@ -5,10 +5,6 @@ export { expect };
 export const test = base;
 
 export const { specStep } = createPlaywrightSpecEvidence(base, {
-  specs: [
-    "specs/ticket-creation.feature.md",
-    "specs/ticket-filtering.feature.md",
-    "specs/ticket-status.feature.md",
-  ],
+  specs: ["specs/**/*.feature.md"],
   reportDir: "test-results/spec-report",
 });
