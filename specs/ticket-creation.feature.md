@@ -4,7 +4,6 @@ title: Ticket creation
 status: draft
 model: TICKET-DESK
 test: playwright
-screenshots: required
 ---
 
 # Ticket creation
