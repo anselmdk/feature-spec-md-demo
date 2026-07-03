@@ -100,6 +100,10 @@ jobs:
             const prNumber = Number('${{ steps.changes.outputs.pr-number }}');
             const body = ${{ toJson(steps.diff_report.outputs.diff-comment-body) }};
             const marker = '<!-- feature-spec-md-pr-diff -->';
+            const buildNumber = String(context.payload.workflow_run.run_number);
+            const baseBuildNumber = '${{ steps.main_build.outputs.build-number }}';
+            const timestamp = new Date().toISOString();
+            const runUrl = context.payload.workflow_run.html_url;
             const comments = await github.paginate(github.rest.issues.listComments, {
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -108,7 +112,17 @@ jobs:
             const previous = comments.find((comment) =>
               comment.user?.type === 'Bot' && comment.body?.includes(marker)
             );
-            const nextBody = `${marker}\n${body}`;
+            const lines = [];
+            lines.push('### PR build ' + buildNumber + ' - ' + timestamp);
+            lines.push('');
+            lines.push(baseBuildNumber ? 'Base: main build ' + baseBuildNumber : 'Base: previous build fallback');
+            lines.push('CI run: [#' + buildNumber + '](' + runUrl + ')');
+            lines.push('');
+            lines.push(body);
+            const entry = lines.join('\n');
+            const nextBody = previous
+              ? previous.body + '\n\n---\n\n' + entry
+              : marker + '\n## Feature spec PR diff history\n\n' + entry;
             if (previous) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
