@@ -3,7 +3,6 @@ id: SUPPORT-QUEUE-SUMMARY
 title: Support queue summary
 status: draft
 test: playwright
-screenshots: required
 ---
 
 # Support queue summary
