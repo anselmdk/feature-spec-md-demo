@@ -23,6 +23,7 @@ const initialTickets: Ticket[] = [
 ];
 
 export function App() {
+  console.log('test')
   const [tickets, setTickets] = useState<Ticket[]>(initialTickets);
   const [title, setTitle] = useState("");
   const [filter, setFilter] = useState<TicketFilter>("all");
