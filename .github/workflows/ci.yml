@@ -7,7 +7,7 @@ permissions:
 
 jobs:
   verify:
-    uses: anselmdk/feature-spec-md/.github/workflows/feature-spec-ci.yml@main
+    uses: anselmdk/feature-spec-md/.github/workflows/consuming-project-feature-spec-ci.yml@main
     with:
       tests: "tests/**/*.ts"
     secrets: inherit
