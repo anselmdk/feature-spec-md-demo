@@ -1,5 +1,6 @@
 export type TicketStatus = "open" | "in-progress" | "resolved";
 export type TicketFilter = "all" | TicketStatus;
+export type TicketPriority = "normal" | "high";
 
 export type Ticket = {
   id: string;
@@ -9,6 +10,7 @@ export type Ticket = {
 };
 
 export const maxTicketTitleLength = 80;
+const highPriorityTitlePattern = /\b(blocked|offline|outage|slow|urgent)\b/i;
 
 export function validateTicketTitle(title: string) {
   const trimmed = title.trim();
@@ -36,6 +38,14 @@ export function createTicket(id: string, title: string): Ticket {
     title: title.trim(),
     status: "open",
   };
+}
+
+export function getTicketPriority(ticket: Ticket): TicketPriority {
+  if (ticket.status === "resolved") {
+    return "normal";
+  }
+
+  return highPriorityTitlePattern.test(ticket.title) ? "high" : "normal";
 }
 
 export function canMoveToStatus(
