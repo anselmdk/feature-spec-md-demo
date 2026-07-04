@@ -25,7 +25,7 @@ jobs:
         github.event.workflow_run.conclusion == 'success' &&
         github.event.workflow_run.pull_requests[0]
       )
-    uses: anselmdk/feature-spec-md/.github/workflows/feature-spec-pr-diff-report.yml@main
+    uses: anselmdk/feature-spec-md/.github/workflows/consuming-project-feature-spec-pr-diff-report.yml@main
     with:
       pr-number: ${{ github.event_name == 'workflow_dispatch' && inputs.pr-number || github.event.workflow_run.pull_requests[0].number }}
     secrets: inherit
