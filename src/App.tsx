@@ -2,6 +2,7 @@ import { FormEvent, useMemo, useState } from "react";
 import {
   createTicket,
   filterTickets,
+  getTicketPriority,
   transitionTicket,
   type Ticket,
   type TicketFilter,
@@ -23,7 +24,6 @@ const initialTickets: Ticket[] = [
 ];
 
 export function App() {
-  console.log('test')
   const [tickets, setTickets] = useState<Ticket[]>(initialTickets);
   const [title, setTitle] = useState("");
   const [filter, setFilter] = useState<TicketFilter>("all");
@@ -158,48 +158,59 @@ export function App() {
       <section className="panel" aria-labelledby="tickets-heading">
         <h2 id="tickets-heading">Tickets</h2>
         <ul className="tickets">
-          {visibleTickets.map((ticket) => (
-            <li key={ticket.id} className="ticket" data-testid="ticket-card">
-              <h3>{ticket.title}</h3>
-              <p>
-                Status: <strong>{ticket.status}</strong>
-              </p>
+          {visibleTickets.map((ticket) => {
+            const priority = getTicketPriority(ticket);
 
-              {ticket.status === "open" ? (
-                <button type="button" onClick={() => startTicket(ticket)}>
-                  Start work
-                </button>
-              ) : null}
+            return (
+              <li key={ticket.id} className="ticket" data-testid="ticket-card">
+                <h3>{ticket.title}</h3>
+                <p>
+                  Status: <strong>{ticket.status}</strong>
+                </p>
+                <p>
+                  Priority: <strong data-testid={`ticket-priority-${ticket.id}`}>{priority}</strong>
+                </p>
 
-              {ticket.status === "in-progress" ? (
-                <div className="resolve">
-                  <label htmlFor={`resolution-${ticket.id}`}>
-                    Resolution note
-                  </label>
-                  <input
-                    id={`resolution-${ticket.id}`}
-                    value={resolutionNotes[ticket.id] ?? ""}
-                    onChange={(event) =>
-                      setResolutionNotes((current) => ({
-                        ...current,
-                        [ticket.id]: event.target.value,
-                      }))
-                    }
-                  />
-                  <button type="button" onClick={() => resolveTicket(ticket)}>
-                    Resolve
+                {priority === "high" ? (
+                  <p className="priority-badge">Needs attention</p>
+                ) : null}
+
+                {ticket.status === "open" ? (
+                  <button type="button" onClick={() => startTicket(ticket)}>
+                    Start work
                   </button>
-                  {statusErrors[ticket.id] ? (
-                    <p role="alert">{statusErrors[ticket.id]}</p>
-                  ) : null}
-                </div>
-              ) : null}
+                ) : null}
 
-              {ticket.resolutionNote ? (
-                <p>Resolution: {ticket.resolutionNote}</p>
-              ) : null}
-            </li>
-          ))}
+                {ticket.status === "in-progress" ? (
+                  <div className="resolve">
+                    <label htmlFor={`resolution-${ticket.id}`}>
+                      Resolution note
+                    </label>
+                    <input
+                      id={`resolution-${ticket.id}`}
+                      value={resolutionNotes[ticket.id] ?? ""}
+                      onChange={(event) =>
+                        setResolutionNotes((current) => ({
+                          ...current,
+                          [ticket.id]: event.target.value,
+                        }))
+                      }
+                    />
+                    <button type="button" onClick={() => resolveTicket(ticket)}>
+                      Resolve
+                    </button>
+                    {statusErrors[ticket.id] ? (
+                      <p role="alert">{statusErrors[ticket.id]}</p>
+                    ) : null}
+                  </div>
+                ) : null}
+
+                {ticket.resolutionNote ? (
+                  <p>Resolution: {ticket.resolutionNote}</p>
+                ) : null}
+              </li>
+            );
+          })}
         </ul>
       </section>
     </main>
