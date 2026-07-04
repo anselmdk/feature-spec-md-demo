@@ -97,6 +97,16 @@ button {
   padding: 16px;
 }
 
+.priority-badge {
+  display: inline-block;
+  border: 1px solid #d99a00;
+  border-radius: 999px;
+  background: #fff6df;
+  color: #7a4d00;
+  font-weight: 700;
+  padding: 4px 10px;
+}
+
 [role="alert"] {
   color: #b42318;
   font-weight: 600;
