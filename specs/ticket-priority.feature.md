@@ -26,3 +26,4 @@ Given the support agent opens the mini support desk
 When the seeded ticket queue is displayed
 Then active operational tickets are shown as high priority
 And the resolved ticket is shown as normal priority
+
