@@ -16,7 +16,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@anselmdk/feature-spec-md": "github:anselmdk/feature-spec-md#codex/spec-source-diff-report",
+    "@anselmdk/feature-spec-md": "0.6.1",
     "react": "latest",
     "react-dom": "latest"
   },
