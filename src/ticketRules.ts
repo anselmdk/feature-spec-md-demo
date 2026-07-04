@@ -1,14 +1,21 @@
 export type TicketStatus = "open" | "in-progress" | "resolved";
 export type TicketFilter = "all" | TicketStatus;
+export type TicketPriority = "low" | "normal" | "high";
 
 export type Ticket = {
   id: string;
   title: string;
   status: TicketStatus;
+  priority: TicketPriority;
   resolutionNote?: string;
 };
 
 export const maxTicketTitleLength = 80;
+export const ticketPriorityRank: Record<TicketPriority, number> = {
+  high: 0,
+  normal: 1,
+  low: 2,
+};
 
 export function validateTicketTitle(title: string) {
   const trimmed = title.trim();
@@ -24,7 +31,11 @@ export function validateTicketTitle(title: string) {
   return null;
 }
 
-export function createTicket(id: string, title: string): Ticket {
+export function createTicket(
+  id: string,
+  title: string,
+  priority: TicketPriority = "normal",
+): Ticket {
   const error = validateTicketTitle(title);
 
   if (error) {
@@ -35,6 +46,7 @@ export function createTicket(id: string, title: string): Ticket {
     id,
     title: title.trim(),
     status: "open",
+    priority,
   };
 }
 
@@ -81,4 +93,17 @@ export function filterTickets(tickets: Ticket[], filter: TicketFilter) {
   }
 
   return tickets.filter((ticket) => ticket.status === filter);
+}
+
+export function sortTicketsByPriority(tickets: Ticket[]) {
+  return [...tickets].sort((left, right) => {
+    const priorityDifference =
+      ticketPriorityRank[left.priority] - ticketPriorityRank[right.priority];
+
+    if (priorityDifference !== 0) {
+      return priorityDifference;
+    }
+
+    return left.title.localeCompare(right.title);
+  });
 }
