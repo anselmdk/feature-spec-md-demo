@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import { filterTickets, type Ticket } from "../../src/ticketRules";
 
 const tickets: Ticket[] = [
-  { id: "1", title: "Open", status: "open" },
-  { id: "2", title: "Progress", status: "in-progress" },
-  { id: "3", title: "Resolved", status: "resolved" },
+  { id: "1", title: "Open", status: "open", priority: "normal" },
+  { id: "2", title: "Progress", status: "in-progress", priority: "normal" },
+  { id: "3", title: "Resolved", status: "resolved", priority: "normal" },
 ];
 
 describe("ticket filtering rules", () => {

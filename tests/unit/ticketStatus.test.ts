@@ -9,11 +9,13 @@ const openTicket: Ticket = {
   id: "1",
   title: "Printer is offline",
   status: "open",
+  priority: "normal",
 };
 const progressTicket: Ticket = {
   id: "2",
   title: "Email delivery is slow",
   status: "in-progress",
+  priority: "normal",
 };
 
 describe("ticket status rules", () => {

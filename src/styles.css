@@ -6,7 +6,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -35,10 +36,12 @@ form,
   max-width: 520px;
 }
 
-input {
+input,
+select {
   padding: 10px;
   border: 1px solid #aeb7c2;
   border-radius: 8px;
+  background: white;
 }
 
 button {

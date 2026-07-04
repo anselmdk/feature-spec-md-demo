@@ -2,30 +2,45 @@ import { FormEvent, useMemo, useState } from "react";
 import {
   createTicket,
   filterTickets,
+  sortTicketsByPriority,
   transitionTicket,
   type Ticket,
   type TicketFilter,
+  type TicketPriority,
 } from "./ticketRules";
 
 const initialTickets: Ticket[] = [
-  { id: "seed-open", title: "Printer is offline", status: "open" },
+  {
+    id: "seed-open",
+    title: "Printer is offline",
+    status: "open",
+    priority: "high",
+  },
   {
     id: "seed-progress",
     title: "Email delivery is slow",
     status: "in-progress",
+    priority: "normal",
   },
   {
     id: "seed-resolved",
     title: "Password reset loop",
     status: "resolved",
+    priority: "low",
     resolutionNote: "Reset link cache was cleared.",
   },
 ];
 
+const ticketPriorities: TicketPriority[] = ["low", "normal", "high"];
+
+function formatPriority(priority: TicketPriority) {
+  return `${priority[0].toUpperCase()}${priority.slice(1)} priority`;
+}
+
 export function App() {
-  console.log('test')
   const [tickets, setTickets] = useState<Ticket[]>(initialTickets);
   const [title, setTitle] = useState("");
+  const [priority, setPriority] = useState<TicketPriority>("normal");
   const [filter, setFilter] = useState<TicketFilter>("all");
   const [titleError, setTitleError] = useState("");
   const [resolutionNotes, setResolutionNotes] = useState<
@@ -44,7 +59,7 @@ export function App() {
   );
 
   const visibleTickets = useMemo(
-    () => filterTickets(tickets, filter),
+    () => sortTicketsByPriority(filterTickets(tickets, filter)),
     [tickets, filter],
   );
 
@@ -53,9 +68,10 @@ export function App() {
     setTitleError("");
 
     try {
-      const ticket = createTicket(`ticket-${Date.now()}`, title);
+      const ticket = createTicket(`ticket-${Date.now()}`, title, priority);
       setTickets((current) => [ticket, ...current]);
       setTitle("");
+      setPriority("normal");
     } catch (error) {
       setTitleError(
         error instanceof Error ? error.message : "Ticket could not be created.",
@@ -132,6 +148,20 @@ export function App() {
             onChange={(event) => setTitle(event.target.value)}
             placeholder="What needs help?"
           />
+          <label htmlFor="ticket-priority">Priority</label>
+          <select
+            id="ticket-priority"
+            value={priority}
+            onChange={(event) =>
+              setPriority(event.target.value as TicketPriority)
+            }
+          >
+            {ticketPriorities.map((value) => (
+              <option key={value} value={value}>
+                {formatPriority(value)}
+              </option>
+            ))}
+          </select>
           <button type="submit">Create ticket</button>
           {titleError ? <p role="alert">{titleError}</p> : null}
         </form>
@@ -163,6 +193,9 @@ export function App() {
               <h3>{ticket.title}</h3>
               <p>
                 Status: <strong>{ticket.status}</strong>
+              </p>
+              <p>
+                Priority: <strong>{formatPriority(ticket.priority)}</strong>
               </p>
 
               {ticket.status === "open" ? (
