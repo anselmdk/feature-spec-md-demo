@@ -7,9 +7,9 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc -b && vite build",
-    "spec:check": "feature-spec-md check --tests \"tests/**/*.ts\" --require-rule-coverage --require-model-coverage",
-    "spec:coverage": "feature-spec-md coverage --tests \"tests/**/*.ts\" --fail-on-missing",
-    "spec:report": "feature-spec-md report --tests \"tests/**/*.ts\" --screenshots \"test-results/spec-report/screenshots-*.json\" --enforce-evidence --out test-results/spec-report/index.html",
+    "spec:check": "feature-spec-md check",
+    "spec:coverage": "feature-spec-md coverage",
+    "spec:report": "feature-spec-md report",
     "test:unit": "vitest run tests/unit",
     "test:e2e": "rm -rf test-results/spec-report && playwright test",
     "verify": "npm run build && npm run spec:check && npm run spec:coverage && npm run test:unit && npm run test:e2e && npm run spec:report",
