@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("SUPPORT-DESK-TICKET-PRIORITY-S001 user creates a high-priority ticket", async ({
+test("SUPPORT-DESK-TICKET-PRIORITY-S001 SUPPORT-DESK-TICKET-PRIORITY-R003 user creates a high-priority ticket", async ({
   page,
 }) => {
   await page.goto("/");
