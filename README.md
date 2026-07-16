@@ -19,11 +19,13 @@ Live demo reports, including scenario screenshots, are available at <https://fea
 ## What this demonstrates
 
 - `specs/` contains model, feature, stack, and design specs.
+- The model report combines field tables with a Mermaid relationship diagram and internally linked open questions and assumptions.
 - `tests/` contains unit and Playwright tests that reference spec IDs from the Markdown files.
 - `npm run spec:check` validates the spec set and fails when required model, rule, or scenario coverage is missing.
 - `npm run spec:coverage` prints the terminal implementation report.
 - `npm run test:e2e` runs Playwright tests and writes screenshot manifests for the spec report.
 - `npm run spec:report` generates the HTML spec report in `test-results/spec-report/index.html` and includes screenshots from `test-results/spec-report/screenshots-*.json`.
+- Feature frontmatter such as `test: unit` and `screenshots: skip` is visible in the report, and skipped screenshot scenarios stay compact without placeholder evidence labels.
 - The GitHub Actions workflow publishes build reports under `build/<build-number>/`, publishes PR diffs under `pr/<pr-number>/<build-number>/`, and can comment on a PR with links to both.
 
 The generated report is the easiest way to understand what `feature-spec-md` provides: it brings together the Markdown specs, implementation coverage, validation status, GitHub/build metadata, source links, and scenario screenshot evidence.
