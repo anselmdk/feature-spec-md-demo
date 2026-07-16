@@ -60,3 +60,20 @@ A ticket filter controls which tickets are visible in the ticket list.
 - TICKET-DESK-R003: A ticket title MUST be valid before the ticket can be created.
 - TICKET-DESK-R004: A ticket MUST have a resolution note before it can be resolved.
 - TICKET-DESK-R005: Filtering MUST NOT change the stored tickets.
+
+## Model Diagram
+
+```mermaid
+erDiagram
+    TICKET_DESK ||--o{ TICKET : contains
+    TICKET }o--|| TICKET_STATUS : has
+    TICKET_FILTER }o--o{ TICKET : selects
+```
+
+## Open Questions
+
+- TICKET-DESK-Q001: Should a resolved ticket be reopenable in a future feature?
+
+## Assumptions
+
+- TICKET-DESK-A001: The demo remains a single-user application, so assignment and permissions are outside its current scope.
