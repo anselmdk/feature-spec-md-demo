@@ -4,6 +4,8 @@ Demo app for [`feature-spec-md`](https://github.com/anselmdk/feature-spec-md).
 
 This repository shows a small support-ticket desk built from Markdown specs, executable tests, screenshot evidence, generated feature spec reports, and PR diff reports. Use it as a reference project when you want to see how the library is intended to fit into a real app and a real pull-request review workflow.
 
+**[Open the latest feature spec report](https://feature-spec-md.anselm.dk/demo/latest/)**
+
 ## See the workflow in action
 
 The clearest example of what this demo and the library can deliver is this feature PR:
@@ -26,7 +28,7 @@ Live demo reports, including scenario screenshots, are available at <https://fea
 - `npm run test:e2e` runs Playwright tests and writes screenshot manifests for the spec report.
 - `npm run spec:report` generates the HTML spec report in `test-results/spec-report/index.html` and includes screenshots from `test-results/spec-report/screenshots-*.json`.
 - Feature frontmatter such as `test: unit` and `screenshots: skip` is visible in the report, and skipped screenshot scenarios stay compact without placeholder evidence labels.
-- The GitHub Actions workflow publishes build reports under `build/<build-number>/`, publishes PR diffs under `pr/<pr-number>/<build-number>/`, and can comment on a PR with links to both.
+- The GitHub Actions workflow publishes immutable build reports under `build/<build-number>/`, keeps the latest default-branch report at `latest/`, publishes PR diffs under `pr/<pr-number>/<build-number>/`, and can comment on a PR with links to both.
 
 The generated report is the easiest way to understand what `feature-spec-md` provides: it brings together the Markdown specs, implementation coverage, validation status, GitHub/build metadata, source links, and scenario screenshot evidence.
 
