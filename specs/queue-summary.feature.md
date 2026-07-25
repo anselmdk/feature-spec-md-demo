@@ -9,7 +9,7 @@ test: playwright
 
 ## Purpose
 
-Give support agents an immediate count of tickets by workflow status before they inspect the ticket list.
+Give support agents an immediate, at-a-glance count of tickets by workflow status before they inspect the ticket list.
 
 ## Rules
 
