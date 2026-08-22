@@ -4,6 +4,7 @@ title: Ticket filtering
 status: draft
 model: TICKET-DESK
 test: playwright
+layer: capability
 ---
 
 # Ticket filtering

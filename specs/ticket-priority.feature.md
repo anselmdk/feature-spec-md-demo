@@ -4,6 +4,7 @@ title: Ticket priority
 status: active
 test: unit
 screenshots: skip
+layer: capability
 ---
 
 # Ticket priority
@@ -21,6 +22,7 @@ Support agents need to distinguish urgent tickets from routine work and see the 
 ## Scenarios
 
 ### SUPPORT-DESK-TICKET-PRIORITY-S001: User creates a high-priority ticket
+
 Test: playwright
 Screenshots: skip
 
@@ -30,6 +32,7 @@ Then the ticket shows "High priority"
 And the next create-ticket priority is normal
 
 ### SUPPORT-DESK-TICKET-PRIORITY-S002: Tickets are sorted by priority
+
 Test: unit
 Screenshots: skip
 

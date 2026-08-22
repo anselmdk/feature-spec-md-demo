@@ -16,7 +16,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@anselmdk/feature-spec-md": "0.8.2",
+    "@anselmdk/feature-spec-md": "0.9.1",
     "react": "latest",
     "react-dom": "latest"
   },
@@ -31,5 +31,28 @@
     "typescript": "latest",
     "vite": "latest",
     "vitest": "latest"
+  },
+  "featureSpecMd": {
+    "report": {
+      "layers": [
+        {
+          "id": "context",
+          "title": "Context",
+          "description": "Shared domain vocabulary, architecture, and design direction"
+        },
+        {
+          "id": "capability",
+          "title": "Capabilities",
+          "description": "Ticket-management behavior and business rules"
+        },
+        {
+          "id": "interface",
+          "title": "Interface",
+          "description": "User-facing orientation and queue presentation"
+        }
+      ],
+      "layersDefaultOpen": false,
+      "documentsDefaultOpen": false
+    }
   }
 }
