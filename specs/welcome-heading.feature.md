@@ -3,6 +3,7 @@ id: SUPPORT-WELCOME-HEADING
 title: Support welcome heading
 status: draft
 test: playwright
+layer: interface
 ---
 
 # Support welcome heading

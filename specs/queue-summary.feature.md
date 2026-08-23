@@ -3,6 +3,7 @@ id: SUPPORT-QUEUE-SUMMARY
 title: Support queue summary
 status: draft
 test: playwright
+layer: interface
 ---
 
 # Support queue summary
@@ -22,4 +23,3 @@ Give support agents a quick count of tickets by workflow status before they insp
 Given the support agent opens the mini support desk
 When the seeded ticket queue is displayed
 Then they see one open ticket, one in-progress ticket, and one resolved ticket
-

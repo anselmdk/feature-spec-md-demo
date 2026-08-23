@@ -4,6 +4,7 @@ title: Ticket status
 status: draft
 model: TICKET-DESK
 test: playwright
+layer: capability
 ---
 
 # Ticket status

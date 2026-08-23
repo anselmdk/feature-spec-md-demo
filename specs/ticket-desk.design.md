@@ -3,6 +3,7 @@ id: TICKET-DESK-DESIGN
 title: Ticket desk design
 status: draft
 model: TICKET-DESK
+layer: context
 ---
 
 # Ticket desk design
