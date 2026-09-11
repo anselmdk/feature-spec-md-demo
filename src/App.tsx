@@ -138,6 +138,62 @@ export function App() {
         </dl>
       </section>
 
+      <section className="panel" aria-labelledby="tickets-heading">
+        <h2 id="tickets-heading">Tickets</h2>
+        <ul className="tickets">
+          {visibleTickets.map((ticket) => (
+            <li
+              key={ticket.id}
+              className="ticket"
+              data-priority={ticket.priority}
+              data-testid="ticket-card"
+            >
+              <h3>{ticket.title}</h3>
+              <p>
+                Status: <strong>{ticket.status}</strong>
+              </p>
+              <p>
+                Priority: <strong>{formatPriority(ticket.priority)}</strong>
+              </p>
+
+              {ticket.status === "open" ? (
+                <button type="button" onClick={() => startTicket(ticket)}>
+                  Start work
+                </button>
+              ) : null}
+
+              {ticket.status === "in-progress" ? (
+                <div className="resolve">
+                  <label htmlFor={`resolution-${ticket.id}`}>
+                    Resolution note
+                  </label>
+                  <input
+                    id={`resolution-${ticket.id}`}
+                    value={resolutionNotes[ticket.id] ?? ""}
+                    onChange={(event) =>
+                      setResolutionNotes((current) => ({
+                        ...current,
+                        [ticket.id]: event.target.value,
+                      }))
+                    }
+                  />
+                  <button type="button" onClick={() => resolveTicket(ticket)}>
+                    Resolve
+                  </button>
+                  {statusErrors[ticket.id] ? (
+                    <p role="alert">{statusErrors[ticket.id]}</p>
+                  ) : null}
+                </div>
+              ) : null}
+
+              {ticket.resolutionNote ? (
+                <p>Resolution: {ticket.resolutionNote}</p>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section className="panel" aria-labelledby="create-ticket-heading">
         <h2 id="create-ticket-heading">Create ticket</h2>
         <form onSubmit={handleCreateTicket}>
@@ -183,57 +239,6 @@ export function App() {
             ),
           )}
         </div>
-      </section>
-
-      <section className="panel" aria-labelledby="tickets-heading">
-        <h2 id="tickets-heading">Tickets</h2>
-        <ul className="tickets">
-          {visibleTickets.map((ticket) => (
-            <li key={ticket.id} className="ticket" data-testid="ticket-card">
-              <h3>{ticket.title}</h3>
-              <p>
-                Status: <strong>{ticket.status}</strong>
-              </p>
-              <p>
-                Priority: <strong>{formatPriority(ticket.priority)}</strong>
-              </p>
-
-              {ticket.status === "open" ? (
-                <button type="button" onClick={() => startTicket(ticket)}>
-                  Start work
-                </button>
-              ) : null}
-
-              {ticket.status === "in-progress" ? (
-                <div className="resolve">
-                  <label htmlFor={`resolution-${ticket.id}`}>
-                    Resolution note
-                  </label>
-                  <input
-                    id={`resolution-${ticket.id}`}
-                    value={resolutionNotes[ticket.id] ?? ""}
-                    onChange={(event) =>
-                      setResolutionNotes((current) => ({
-                        ...current,
-                        [ticket.id]: event.target.value,
-                      }))
-                    }
-                  />
-                  <button type="button" onClick={() => resolveTicket(ticket)}>
-                    Resolve
-                  </button>
-                  {statusErrors[ticket.id] ? (
-                    <p role="alert">{statusErrors[ticket.id]}</p>
-                  ) : null}
-                </div>
-              ) : null}
-
-              {ticket.resolutionNote ? (
-                <p>Resolution: {ticket.resolutionNote}</p>
-              ) : null}
-            </li>
-          ))}
-        </ul>
       </section>
     </main>
   );

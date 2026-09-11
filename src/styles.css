@@ -100,6 +100,12 @@ button {
   padding: 16px;
 }
 
+.ticket[data-priority="high"] {
+  border-color: #d92d20;
+  border-left-width: 6px;
+  background: #fff8f7;
+}
+
 [role="alert"] {
   color: #b42318;
   font-weight: 600;

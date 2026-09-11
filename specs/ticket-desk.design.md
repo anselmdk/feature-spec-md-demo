@@ -21,11 +21,12 @@ The ticket desk should feel lightweight, readable, and easy to verify from tests
 - Keep the ticket list visible as the primary workspace.
 - Make validation messages close to the action that caused them.
 - Show status changes immediately after user actions.
+- Use a restrained visual accent to make high-priority tickets easy to scan.
 - Keep filters simple enough that screenshot evidence is easy to understand.
 
 ## Layout
 
-The page should present ticket creation controls, status actions, filter controls, and the ticket list in a straightforward flow that works in a small demo window.
+The page should present the queue summary and ticket list before creation and filter controls, keeping the primary workspace visible near the top of a small demo window.
 
 ## Interaction
 
