@@ -138,53 +138,6 @@ export function App() {
         </dl>
       </section>
 
-      <section className="panel" aria-labelledby="create-ticket-heading">
-        <h2 id="create-ticket-heading">Create ticket</h2>
-        <form onSubmit={handleCreateTicket}>
-          <label htmlFor="ticket-title">Title</label>
-          <input
-            id="ticket-title"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-            placeholder="What needs help?"
-          />
-          <label htmlFor="ticket-priority">Priority</label>
-          <select
-            id="ticket-priority"
-            value={priority}
-            onChange={(event) =>
-              setPriority(event.target.value as TicketPriority)
-            }
-          >
-            {ticketPriorities.map((value) => (
-              <option key={value} value={value}>
-                {formatPriority(value)}
-              </option>
-            ))}
-          </select>
-          <button type="submit">Create ticket</button>
-          {titleError ? <p role="alert">{titleError}</p> : null}
-        </form>
-      </section>
-
-      <section className="panel" aria-labelledby="filters-heading">
-        <h2 id="filters-heading">Filters</h2>
-        <div className="filters">
-          {(["all", "open", "in-progress", "resolved"] as TicketFilter[]).map(
-            (value) => (
-              <button
-                key={value}
-                type="button"
-                aria-pressed={filter === value}
-                onClick={() => setFilter(value)}
-              >
-                {value}
-              </button>
-            ),
-          )}
-        </div>
-      </section>
-
       <section className="panel" aria-labelledby="tickets-heading">
         <h2 id="tickets-heading">Tickets</h2>
         <ul className="tickets">
@@ -239,6 +192,53 @@ export function App() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section className="panel" aria-labelledby="create-ticket-heading">
+        <h2 id="create-ticket-heading">Create ticket</h2>
+        <form onSubmit={handleCreateTicket}>
+          <label htmlFor="ticket-title">Title</label>
+          <input
+            id="ticket-title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            placeholder="What needs help?"
+          />
+          <label htmlFor="ticket-priority">Priority</label>
+          <select
+            id="ticket-priority"
+            value={priority}
+            onChange={(event) =>
+              setPriority(event.target.value as TicketPriority)
+            }
+          >
+            {ticketPriorities.map((value) => (
+              <option key={value} value={value}>
+                {formatPriority(value)}
+              </option>
+            ))}
+          </select>
+          <button type="submit">Create ticket</button>
+          {titleError ? <p role="alert">{titleError}</p> : null}
+        </form>
+      </section>
+
+      <section className="panel" aria-labelledby="filters-heading">
+        <h2 id="filters-heading">Filters</h2>
+        <div className="filters">
+          {(["all", "open", "in-progress", "resolved"] as TicketFilter[]).map(
+            (value) => (
+              <button
+                key={value}
+                type="button"
+                aria-pressed={filter === value}
+                onClick={() => setFilter(value)}
+              >
+                {value}
+              </button>
+            ),
+          )}
+        </div>
       </section>
     </main>
   );

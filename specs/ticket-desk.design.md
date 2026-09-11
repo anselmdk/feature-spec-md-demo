@@ -26,7 +26,7 @@ The ticket desk should feel lightweight, readable, and easy to verify from tests
 
 ## Layout
 
-The page should present ticket creation controls, status actions, filter controls, and the ticket list in a straightforward flow that works in a small demo window.
+The page should present the queue summary and ticket list before creation and filter controls, keeping the primary workspace visible near the top of a small demo window.
 
 ## Interaction
 
