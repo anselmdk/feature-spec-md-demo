@@ -189,7 +189,12 @@ export function App() {
         <h2 id="tickets-heading">Tickets</h2>
         <ul className="tickets">
           {visibleTickets.map((ticket) => (
-            <li key={ticket.id} className="ticket" data-testid="ticket-card">
+            <li
+              key={ticket.id}
+              className="ticket"
+              data-priority={ticket.priority}
+              data-testid="ticket-card"
+            >
               <h3>{ticket.title}</h3>
               <p>
                 Status: <strong>{ticket.status}</strong>
